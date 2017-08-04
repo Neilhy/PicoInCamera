@@ -58,7 +58,7 @@ float getticks()
 #endif
 
 void *cascade = 0;
-int minsize=80;
+int minsize=60;
 int maxsize=1024;
 
 float angle=0.0f;
@@ -97,11 +97,9 @@ JNIEXPORT void JNICALL Java_com_cv_hy_picoincamera_PicoHelper_detect
     fclose(file);
 
 cv::Mat* imgMat=(cv::Mat*)originObj;
-LOGI("# before convert to IplImage:'width:%d and height:%d'\n", imgMat->cols,imgMat->rows);
 
 IplImage img;
 img =IplImage(*imgMat);
-LOGI("# before process:'width:%d and height:%d'\n", img.width,img.height);
 
 process_image(&img,1);
 //const char *outfile = env->GetStringUTFChars( outputFile, &iscopy);//测试的时候用作保存地址
@@ -110,7 +108,7 @@ process_image(&img,1);
 
 *(cv::Mat*)outputObj=cv::cvarrToMat(&img, true);//将传过来的形参地址改变成指向检测过后的对象地址
 
-LOGI("Mat descMat address and dims:%lld and %d and rows %d and cols %d\n",jlong(outputObj),((cv::Mat*)outputObj)->dims,((cv::Mat*)outputObj)->rows,((cv::Mat*)outputObj)->cols);
+//LOGI("Mat descMat address and dims:%lld and %d and rows %d and cols %d\n",jlong(outputObj),((cv::Mat*)outputObj)->dims,((cv::Mat*)outputObj)->rows,((cv::Mat*)outputObj)->cols);
 
 imgMat->release();
 
@@ -120,7 +118,7 @@ free(cascade);
 
 void process_image(IplImage* frame, int draw)
 {
-    LOGI("# load image 'width:%d and height:%d'\n", frame->width,frame->height);
+//    LOGI("# load image 'width:%d and height:%d'\n", frame->width,frame->height);
     int i, j;
     float t;
 
@@ -153,7 +151,7 @@ void process_image(IplImage* frame, int draw)
     }
 
     // perform detection with the pico library
-    t = getticks();
+//    t = getticks();
 
     if(usepyr)
     {
@@ -205,8 +203,8 @@ void process_image(IplImage* frame, int draw)
         ndetections = cluster_detections(rcsq, ndetections);
     }
 
-    t = getticks() - t;
-    LOGI("JNI time: %f s",t);
+//    t = getticks() - t;
+//    LOGI("JNI time: %f s",t);
     // if the flag is set, draw each detection
     if(draw)
         for(i=0; i<ndetections; ++i)
